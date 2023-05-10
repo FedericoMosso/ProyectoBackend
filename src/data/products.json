@@ -1,72 +1,98 @@
 [
   {
-    "title": "bondiola",
-    "description": "fiambre",
-    "price": 500,
-    "carts": [],
+    "title": "Titulo nuevo",
+    "description": "10 cajas x 20 bolsas",
+    "price": 18000,
+    "thumbnail": "./img/iphone002.jpg",
+    "stock": 100,
     "id": 1
   },
   {
-    "title": "salame",
-    "description": "fiambre",
-    "price": 450,
-    "carts": [],
+    "title": "probando",
+    "description": "24 - bot. 12 l",
+    "price": 80000,
+    "thumbnail": "./img/pc002.jpg",
+    "stock": 100,
     "id": 2
   },
   {
-    "title": "jamon crudo",
-    "description": "fiambre",
-    "price": 800,
-    "carts": [],
+    "title": "Sirope de regaliz",
+    "description": "12 - bot. 550 ml",
+    "price": 90,
+    "thumbnail": "./img/ipad998.jpg",
+    "stock": 100,
     "id": 3
   },
   {
-    "title": "jamon cocido",
-    "description": "fiambre",
-    "price": 450,
-    "carts": [],
+    "title": "Bondiola ahumada",
+    "description": "10 cajas x 20 bolsas",
+    "price": 18000,
+    "thumbnail": "./img/iphone002.jpg",
+    "stock": 100,
     "id": 4
   },
   {
-    "title": "lomo ahumado",
-    "description": "fiambre",
-    "price": 550,
-    "carts": [],
+    "title": "Salsa de arándanos Northwoods",
+    "description": "12 - frascos 12 l",
+    "price": 5064,
+    "thumbnail": "./img/a50.jpg",
+    "stock": 76,
     "id": 5
   },
   {
-    "title": "berenjena",
-    "description": "escabeche",
-    "price": 400,
-    "carts": [],
+    "title": "Queso Manchego La Pastora",
+    "description": "10 - paq. 500 g",
+    "price": 60000,
+    "thumbnail": "./img/canont6.jpg",
+    "stock": 100,
     "id": 6
   },
   {
-    "title": "ciervo",
-    "description": "escabeche",
-    "price": 600,
-    "carts": [],
+    "title": "Cordero Alice Springs",
+    "description": "20 - latas 1 kg",
+    "price": 35000,
+    "thumbnail": "./img/iphone002.jpg",
+    "stock": 100,
     "id": 7
   },
   {
-    "title": "pollo",
-    "description": "escabeche",
-    "price": 500,
-    "carts": [],
+    "title": "Refresco Guaraná Fantástica",
+    "description": "12 - latas 355 ml",
+    "price": 80000,
+    "thumbnail": "./img/pc002.jpg",
+    "stock": 100,
     "id": 8
   },
   {
-    "title": "ciruela",
-    "description": "cmermelada",
-    "price": 350,
-    "carts": [],
+    "title": "Chocolate Schoggi",
+    "description": "100 - piezas 100 g",
+    "price": 90,
+    "thumbnail": "./img/ipad998.jpg",
+    "stock": 100,
     "id": 9
   },
   {
-    "title": "durazno",
-    "description": "mermelada",
-    "price": 300,
-    "carts": [],
+    "title": "Té Dharamsala",
+    "description": "10 cajas x 20 bolsas",
+    "price": 18000,
+    "thumbnail": "./img/iphone002.jpg",
+    "stock": 100,
     "id": 10
+  },
+  {
+    "title": "Mezcla Gumbo del chef Anton",
+    "description": "36 cajas",
+    "price": 2000,
+    "thumbnail": "./img/calefon.jpg",
+    "stock": 95,
+    "id": 11
+  },
+  {
+    "title": "Mezcla Gumbo del chef Anton",
+    "description": "36 cajas",
+    "price": 2000,
+    "thumbnail": "./img/calefon.jpg",
+    "stock": 10,
+    "id": 13
   }
 ]

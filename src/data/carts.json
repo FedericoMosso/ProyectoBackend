@@ -1,0 +1,27 @@
+[
+    {
+      "products": [
+        {
+          "Producto": {
+            "title": "Chocolate Schoggi",
+            "description": "100 - piezas 100 g",
+            "price": 90,
+            "thumbnail": "./img/ipad998.jpg",
+            "stock": 15,
+            "id": 9
+          },
+          "Cantidad": 50
+        }
+      ],
+      "id": 1
+    },
+    {
+      "products": [
+        {
+          "title": "Cordero Alice Springs",
+          "cantidad": 26
+        }
+      ],
+      "id": 2
+    }
+  ]

@@ -1,5 +1,6 @@
 import { Router } from "express"
-import manager from './../../managers/Cart.js'
+import manager from '../../managers/cart.js'
+import prod_manager from '../../managers/product.js'
 
 const router = Router()
 
@@ -26,9 +27,9 @@ router.get('/', async(req,res,next)=> {
         next(error)
     }
 })
-router.get('/:pid', async(req,res,next)=> {
+router.get('/:cid', async(req,res,next)=> {
     try {
-        let id = Number(req.params.pid)
+        let id = Number(req.params.cid)
         let one = manager.read_cart(id)
         if (one) {
             return res.json({ status:200,one })
@@ -39,9 +40,9 @@ router.get('/:pid', async(req,res,next)=> {
         next(error)
     }
 })
-router.put('/:pid', async(req,res,next)=> {
+router.put('/:cid', async(req,res,next)=> {
     try {
-        let id = Number(req.params.pid)
+        let id = Number(req.params.cid)
         let data = req.body
         let response = await manager.update_cart(id,data)
         if (response===200) {
@@ -52,9 +53,27 @@ router.put('/:pid', async(req,res,next)=> {
         next(error)
     }
 })
-router.delete('/:pid', async(req,res,next)=> {
+
+router.put("/:cid/product/:pid/:units", async (req, res, next) => {
     try {
-        let id = Number(req.params.pid)
+        let id = Number(req.params.pid);
+        let cid = Number(req.params.cid);
+        let units = Number(req.params.units);
+    
+        let response = await manager.update_cart(cid, id, units);
+        if (response === 200) {
+            return res.json({ status: 200, message: "cart updated" });
+        }
+        return res.json({ status: 404, message: "not found" });
+        } catch (error) {
+        next(error);
+        }
+    });
+
+
+router.delete('/:cid', async(req,res,next)=> {
+    try {
+        let id = Number(req.params.cid)
         let response = await manager.destroy_cart(id)
         if (response===200) {
             return res.json({ status:200,message:'cart deleted'})
@@ -64,5 +83,39 @@ router.delete('/:pid', async(req,res,next)=> {
         next(error)
     }
 })
+
+router.delete("/:cid/product/:pid/:units", async (req, res, next) => {
+        try {
+        let id = Number(req.params.pid);
+        let cid = Number(req.params.cid);
+        let units = Number(req.params.units);
+    
+        let response = await manager.delete_cart(cid, id, units);
+        if (response === 200) {
+            return res.json({ status: 200, message: "Units Delete" });
+        }
+        return res.json({ status: 404, message: "not found" });
+        } catch (error) {
+        next(error);
+        }
+    });
+
+
+// router.delete('/:cid/product/:pid/:units', async(req,res,next)=> {
+//     try {
+//         let id = Number(req.params.pid)
+//         let cid = Number(req.params.cid)
+//         let units = Number(req.params.units)
+
+//         let response = await manager.destroy_cart(cid, id, units);
+//         if (response === 200) {
+//             return res.json({ status: 200, message: "Stock descontado" });
+//         }
+
+//         return res.json({ status:404,message:'not found'})
+//     } catch(error) {
+//         next(error)
+//     }
+// })
 
 export default router
