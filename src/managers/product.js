@@ -41,6 +41,8 @@ class Product {
             return null
         }
     }
+
+
     read_products() {
         return this.products
     }
@@ -62,7 +64,7 @@ class Product {
         return 'getProductById: Error';
         }
     }
-    
+
     async update_product(id,data) {
         try {
             let one = await this.read_product(id)

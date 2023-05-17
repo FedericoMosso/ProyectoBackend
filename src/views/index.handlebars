@@ -1,18 +1,30 @@
-<h3>HOLA {{name}}</h3>
-{{#if last_name}}
-<h2>{{last_name}}</h2>
-{{else}}
-<h2>aca deberia haber un apellido, si existe</h2>
-{{/if}}
-<div class="d-flex justify-content-evenly">
-{{#each alumnos}}
-    <div class="card" style="width: 15rem">
-        <img src={{this.photo}} class="card-img-top" style="width: 15rem;height:8rem">
+<div class="container usuario">
+    <div>
+        
+    </div>
+    <div>
+        <h3>BIENVENIDO</h3><img src={{photo}} alt="Avatar" class="avatar"><h2>{{name}}  
+        {{#if last_name}}
+        {{last_name}}
+        {{else}}
+        Apellido desconocido</h2>
+        {{/if}}
+    </div>
+</div>
+<div class="container">
+    <div class="d-flex ">
+    {{#each produtcs}}
+
+    <div class="card">
+        <div class="">
+            <img src={{this.photo}} class="card-img-top">
+        </div>
         <div class="card-body">
-            <h5 class="card-title">{{this.name}}</h5>
-            <p class="card-text">Alumno de backend.</p>
-            <a href="#" class="btn btn-primary">+Info</a>
+            <h5>{{this.title}}</h5>
+            <p class="card-text">{{price}}</p>
+            <a href="#" class="btn agregar-carrito"> Agregar al carrito </a>
         </div>
     </div>
-{{/each}}
+    {{/each}}
+</div>
 </div>
