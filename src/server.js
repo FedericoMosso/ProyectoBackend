@@ -1,11 +1,16 @@
 import server from "./app.js"
 import { Server } from "socket.io"
-import fs from 'fs'
-import CartManager from "./managers/cart.js"
+import Carts from "./models/cart.model.js"
+import { connect } from "mongoose"
 
 
 const PORT = process.env.PORT || 3000 // lo cambie pq mi puerto 8080 esta siempre ocupado despues rechaza este cambio
-const ready = ()=> console.log('server ready on port '+PORT)
+const ready = ()=> {
+    console.log('server ready on port '+PORT);
+    connect(process.env.LINK_MONGO)
+    .then(()=>console.log('Conectado a la base de datos'))
+    .catch(err=>console.log(err))
+}
 
 let http_server = server.listen(PORT,ready)
 let socket_server = new Server(http_server)
@@ -17,36 +22,41 @@ let socket_server = new Server(http_server)
 let numUsers = 0;
 
 
-
 socket_server.on("connection", socket => {
-    socket.on("getCartContent", (cartId) => {
+
+    socket.on("getUserCartId", async () => {
+        
+    })
+
+    socket.on("getCartContent", async (cartId) => {
 
         console.log("el servidor recibio una solicitud de carrito:", cartId)
         try {
-            const cart = CartManager.read_cart(cartId)
-    
-            let i = 0
-    
-            cart.products.forEach(e => {
-                i += e.x
-            })
-    
-            socket.emit("cartUpdated", i)
+            const Cart = await Carts.findById(cartId)
+            console.log(Cart)
+            if (Cart != null) {
+                let i = 0
+                Cart.products.forEach(e => {
+                    i += e.units
+                })
+                    
+                socket.emit("cartUpdated", i)
+            } else {
+                let message = 'not found'
+                socket.emit("cartUpdated", message)
+            }
         } catch (err) {
+            socket.emit("cartUpdated", -1)
             console.log(err)
         }
     }) 
 })
 
+
+
+
 socket_server.on('connection', (socket) => {
-/*
-    socket.on('agregar_a_carrito', () => {
-        const carts = JSON.parse(fs.readFileSync('./src/data/carts.json'))
-                const numContador = carts.reduce((total, currentCart) => total + currentCart.products.length,0)
-                console.log(numContador)
-                socket.emit('num_products', numContador)
-    });
-*/
+
 // Chatroom
 
     let addedUser = false;
@@ -98,11 +108,11 @@ socket_server.on('connection', (socket) => {
         if (addedUser) {
             --numUsers;
 
-            // // echo globally that this client has left
-            // socket.broadcast.emit('user left', {
-            //     username: socket.username,
-            //     numUsers: numUsers
-            // });
+            // echo globally that this client has left
+            socket.broadcast.emit('user left', {
+                username: socket.username,
+                numUsers: numUsers
+            });
         }
     });
 });

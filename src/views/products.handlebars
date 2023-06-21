@@ -1,11 +1,33 @@
 
 <div class="container title">
-    {{topTitle}}
+  <div class="pagination-buttons">
+    <a hidden id="previousPageButton" href="">Previous Page</a>
+    <a hidden id="nextPageButton" href="">Next Page</a>
+</div>
+<form action="/products" method="GET">
+<input type="text" placeholder="Buscar productos" name="filter">
+<button type="submit">Buscar</button>
+</form>
+
+    {{topTitle}}<br>
+    {{limit}}
 </div>
 <div class="container">
-    <div class="d-flex prodcutos" id="containerElementos">
-
+<div class="d-flex productos" id="containerElementos">
+  <div class="cards-container">
+    {{#each products}}
+  <div class="card" style="width: 18rem;">
+  <img class="card-img-top" src="{{thumbnail}}" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{title}}</h5>
+    <p class="card-text">{{price}}</p>
+    <a href="{{link}}" class="btn btn-primary">Ver prodcuto »</a>
+  </div>
 </div>
+{{/each}}
+  </div>
+</div>
+
 </div>
 
 <script type="module" src={{script2}}></script>

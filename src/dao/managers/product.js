@@ -1,4 +1,6 @@
 import fs from 'fs'
+import mongoose from "mongoose"
+import ProductModel from "../../models/prodcuct.model.js"
 
 class Product {
     constructor(path) {
@@ -8,6 +10,9 @@ class Product {
     }
     init(path) {
         let file = fs.existsSync(path)
+        console.log("heh")
+        console.log(ProductModel)
+
         if (!file) {
             fs.writeFileSync(path,'[]')
             console.log('file created at path: '+this.path)
@@ -31,6 +36,7 @@ class Product {
                 this.products.push(data)
                 let data_json = JSON.stringify(this.products,null,2)
                 await fs.promises.writeFile(this.path,data_json)
+                await 
                 console.log('id´s created product: '+data.id)
                 return 201
             }
@@ -102,3 +108,4 @@ class Product {
 let prod_manager = new Product('./src/data/products.json')
 
 export default prod_manager
+

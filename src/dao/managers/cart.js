@@ -47,22 +47,6 @@ class Cart {
         return this.carts.find(each=>each.id===id)
     }
 
-    // async update_cart(id,data) {
-    //     try {
-    //         let one = this.read_cart(id)
-    //         for (let prop in data) {
-    //             one[prop] = data[prop]
-    //         }
-    //         console.log(data)
-    //         let data_json = JSON.stringify(this.carts,null,2)
-    //         await fs.promises.writeFile(this.path,data_json)
-    //         console.log('updated cart: '+id)
-    //         return 200
-    //     } catch(error) {
-    //         console.log(error)
-    //         return null
-    //     }
-    // }
 
     async reserve_stock(cid, pid, x) {
             try {
@@ -138,60 +122,8 @@ class Cart {
                 console.log(err);
                 return null;
             }
-
-            /*
-                try {
-                    let auxCart = this.read_cart(cid);
-                    let auxCartProduct = findProduct(auxCart, pid, x);
-                    let auxProducts = prod_manager.read_products();
-                    console.log(auxProducts);
-                    console.log("delete cart")
-                    let auxProduct = prod_manager.read_product(pid);
-                    function findProduct(auxCart, pid, x) {
-                        let foundProduct = auxCart.products.find(product => product.id === pid);
-                        if (foundProduct) {
-                            foundProduct.units -= x;
-                        }
-                        return foundProduct;
-                        } 
-                
-                    for (let index = 0; index < auxProducts.length; index++) {
-                        let element = auxProducts[index];
-                        if (pid === element.id) {
-                        auxProducts[index].stock = element.stock + x;
-                        prod_manager.update_product(pid, element);
-                        }
-                    }
-                    let data_json = JSON.stringify(this.carts, null, 2);
-                    await fs.promises.writeFile(this.path, data_json);
-                    return 200;
-                    } catch (error) {
-                    console.log(error);
-                    return null;
-                }*/
             }
 
-    // async destroy_cart(cid,pid,x) {
-    //     try {
-    //         let carts = this.carts.find(each=>each.id===cid)
-    //         let producto = this.carts.product.find(each=>each.id===pid)
-    //         let cantidad_en_carrito = producto.stock
-    //         console.log(cantidad_en_carrito)
-    //         if (one) {
-    //             this.carts = this.carts.filter(each=>each.id!==id)
-    //             this.carts.product = this.carts.product.filter(each=>each.id!==id)
-    //             let data_json = JSON.stringify(this.carts,null,2)
-    //             await fs.promises.writeFile(this.path,data_json)
-    //             console.log('delete cart: '+id)
-    //             return 200
-    //         }
-    //         console.log('not found')
-    //         return null
-    //     } catch(error) {
-    //         console.log(error)
-    //         return null
-    //     }
-    // }
 
     async destroy_cart(id) {
         try {
@@ -211,38 +143,6 @@ class Cart {
         }
     }
 
-
-
-    // async destroy_cart(cid, pid, x) {
-    //     try {
-    //         let auxCart = this.read_cart(cid);
-    //         let auxProducts = prod_manager.read_products();
-    //         let auxProduct = prod_manager.read_product(pid);
-    //         let unitscartProduct = auxCart.products(pid).units;
-
-
-
-
-
-    //         for (let index = 0; index < auxProducts.length; index++) {
-    //             let element = auxProducts[index];
-    //             if (pid === element.id) {
-    //             auxProducts[index].stock = element.stock + x;
-    //             prod_manager.update_product(pid, element);
-    //             }
-    //         }
-
-    //         // Condition for deleting cart not defined
-    //         this.carts = this.carts.filter(each => each.id !== id);
-    //         let data_json = JSON.stringify(this.carts,null,2)
-    //             await fs.promises.writeFile(this.path,data_json)
-    //             console.log('delete cart: '+id)
-    //             return 200
-    //     } catch(error) {
-    //         console.log(error)
-    //         return null
-    //     }
-    // }
 }
 let manager = new Cart('./src/data/carts.json')
 

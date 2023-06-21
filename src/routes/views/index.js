@@ -1,7 +1,6 @@
 import { Router } from "express"
-import auth_router from "./auth.js"
-import ProductManager from "../../managers/product.js"
 import { ProductsArrayConvert } from "../../devUtils.js"
+import Products from '../../models/product.model.js'
 
 const router = Router()
 
@@ -12,15 +11,12 @@ router.get(
             //let hola = chau
             return res.render(
                 'index',    //nombre de la vista
-                {           //datos dinamicos que puede llegar a necesitar la vista
-                    name: 'Federico',
-                    last_name: 'Mosso',
+                {         
+                    name: 'Nico',
+                    last_name: 'Lopez',
                     photo: 'https://www.w3schools.com/howto/img_avatar.png',
-                    //last_name: 'borraz',
-                    produtcs: [
-                        {title:'Bondiola Ahumada', photo:'public/img/1.jpg', price: '$15.000'},
-                        {title:'Bondiola Ahumada', photo:'public/img/2.jpg', price: '$20.000'},
-                        {title:'Bondiola Ahumada', photo:'public/img/3.jpg', price: '$23.000'}],
+
+                    
                     title: 'index',
                     script: '/public/conection.js'
                 }        
@@ -32,58 +28,56 @@ router.get(
 )
 
 router.get("/products/:pid", async (req, res, next) => {
-
     try {
         return res.render("view_product", {
             script2: '/public/uniqueProduct.js',
-            topTitle: "prueba"
+            topTitle: "prueba",
+            conection: '/public/conection.js'
         })
     } catch(error) {
 
     }
 })
 
-router.get(
-    '/products',
-    async(req,res,next) => {
-        try {
-
-            const prods = ProductManager.read_products()
-            const prodsClone = JSON.parse(JSON.stringify(prods)) // esto lo hago porque nose si el product manager regresa el objeto original 
-            const products = ProductsArrayConvert(prodsClone)
-            // al final si cambia el array original y tuve que clonar
-
-
-            /*
-            [ // estos eran los productos que estaban en el render.
-                {title:'Bondiola Ahumada', photo:'public/img/1.jpg', price: '$15.000'},
-                {title:'Bondiola Ahumada', photo:'public/img/2.jpg', price: '$20.000'},
-                {title:'Bondiola Ahumada', photo:'public/img/2.jpg', price: '$20.000'},
-                {title:'Bondiola Ahumada', photo:'public/img/2.jpg', price: '$20.000'},
-                {title:'Bondiola Ahumada', photo:'public/img/2.jpg', price: '$20.000'},
-                {title:'Bondiola Ahumada', photo:'public/img/2.jpg', price: '$20.000'},
-                {title:'Bondiola Ahumada', photo:'public/img/2.jpg', price: '$20.000'},
-                {title:'Bondiola Ahumada', photo:'public/img/2.jpg', price: '$20.000'},
-                {title:'Bondiola Ahumada', photo:'public/img/2.jpg', price: '$20.000'},
-                {title:'Bondiola Ahumada', photo:'public/img/2.jpg', price: '$20.000'},
-                {title:'Bondiola Ahumada', photo:'public/img/2.jpg', price: '$20.000'},
-                {title:'Bondiola Ahumada', photo: 'public/img/3.jpg', price: '$23.000'}
-            ],
-            */
-
-            return res.render('products', {
-                products: products,
-                title: 'Products Page',
-                topTitle: `Products: ${products.length}`,
-                script: '/public/products.js',
-            })
-
-        } catch (error) {
-            console.log(error)
-            next()
+router.get('/products', async (req, res, next) => {
+    try {
+        const pageNumber = parseInt(req.query.page) || 1;
+        const productsPerPage = +req.query.limit || 5;
+        const filter = req.query.filter || "";
+        const query = {};
+        if (filter) {
+            query.title = { $regex: filter, $options: "i" };
         }
+        
+        const products = await Products.paginate(query, { page: pageNumber, limit: productsPerPage });
+        console.log(products)
+
+        const formattedProducts = products.docs.map(product => ({
+            title: product.title,
+            thumbnail: product.thumbnail,
+            price: product.price,
+            link: `/products/${product._id}`
+        }));
+
+        return res.render('products', {
+            //products: formattedProducts,
+            title: 'Products Page',
+            //topTitle: `Total Products: ${products.totalDocs}`,
+            //limit: `Productos por pagina ${products.limit}`,
+            conection: '/public/conection.js',
+            script2: "/public/products.js",
+            //cart: 'numProducts',
+            //paginationprev: `${products.prevPage}`,
+           // paginationnext: `${products.nextPage}`,
+            //currentPage: `Pagina ${pageNumber}`,
+            //totalPages: products.totalPages,
+            //filter: filter
+        });
+    } catch (error) {
+        console.log(error);
+        next(error);
     }
-)
+});
 
 router.get(
     '/new_product',
@@ -92,8 +86,8 @@ router.get(
             return res.render(
                 'new_product',
                 {   title: 'new_product',
-                    script: '/public/conection.js',
-                    title: 'Product' }
+                    title: 'Product',
+                    conection: '/public/conection.js'}
             )
         } catch (error) {
             next()
@@ -106,8 +100,13 @@ router.get(
     '/carts',
     async(req,res,next) => {
         try {
+            
             return res.render('carts', {
-                script: "public/cart.js"
+                name: 'Nico',
+                last_name: 'Lopez',
+                photo: 'https://www.w3schools.com/howto/img_avatar.png',
+                script: "public/cart.js",
+                conection: '/public/conection.js'
             })
         } catch (error) {
             next()
@@ -120,10 +119,11 @@ router.get(
     '/chat',
     async(req,res,next) => {
         try {
-            return res.render(
-                'chat',
-                { title: 'Chat bot' }
-            )
+            return res.render('chat', {
+                title: 'Chat bot',
+                conection: '/public/conection.js',
+                script2: "public/chatbot.js"
+            })
         } catch (error) {
             next()
         }
@@ -136,7 +136,8 @@ router.get(
         try {
             return res.render(
                 'form',
-                { title: 'Form' }
+                { title: 'Form',
+                conection: '/public/conection.js' }
             )
         } catch (error) {
             next()
@@ -150,7 +151,8 @@ router.get(
         try {
             return res.render(
                 'register',
-                { title: 'Register' }
+                { title: 'Register', 
+                conection: '/public/conection.js'}
             )
         } catch (error) {
             next()
@@ -158,11 +160,22 @@ router.get(
     }
 )
 
-router.use('/auth',auth_router)
-// router.use('/products',products_router)
-// router.use('/carts',carts_router)
+router.get('/login', async (req, res, next) => {
+    try {
+        return res.render('login', {})
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
+
+router.get('/signout', async (req, res, next) => {
+    try {
+        return res.render('signout', {})
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
 
 export default router
-//en el enrutador principal de vistas
-//UNICAMENTE llamo a los enrutadores de vistas de recursos
-//el endpoint de prueba de la linea y ESTA MAL UBICADO
