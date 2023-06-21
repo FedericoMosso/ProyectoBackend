@@ -1,4 +1,3 @@
-
 const websiteUrl = 'http://localhost:3000'
 
 const urlParams = new URLSearchParams(window.location.search)
