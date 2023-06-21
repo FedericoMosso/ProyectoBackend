@@ -1,5 +1,7 @@
-const currentCart = 1
+
 const websiteUrl = 'http://localhost:3000'
+
+const checkoutButton = document.getElementById("checkoutButton")
 
 const ConvertPrice = (amount, add) => {// recibe dos valores: un numero y un texto para agregar entre separaciones (Esto para convertir el amount en un texto mas bonito para el usuario)
     try {
@@ -39,20 +41,18 @@ const update = async () => {
     const elementProductList = document.getElementById("productList")
     if (elementProductList == undefined) return
 
-    const productsResponse = await fetch(`${websiteUrl}/api/products`)
-    .then(res => res.json())
+    //const productsRequest = await fetch(`${websiteUrl}/api/products`)
+    const cartRequest = await fetch(`${websiteUrl}/api/carts/${sessionStorage.getItem("userCart")}`)
+    const cartpriceRequest = await fetch(`${websiteUrl}/api/carts/bills/${sessionStorage.getItem("userCart")}`)
+    const cartResponse = await cartRequest.json()
+    const cartpriceResponse = await cartpriceRequest.json()
 
-    const cartResponse = await fetch(`${websiteUrl}/api/carts/${currentCart}`, {
-        method: "GET"
-    })
-    .then(res => res.json())
-
-    if (productsResponse.status != 200) return
-    if (cartResponse.status != 200) return
+    //if (productsRequest.status != 200) return
+    if (cartRequest.status != 200) return
 
     while (elementProductList.firstChild) elementProductList.removeChild(elementProductList.firstChild);
 
-    cartResponse.one.products.forEach(e => {
+    cartResponse.products.forEach(e => {
         
         const divContainer = document.createElement("div")
         const img = document.createElement("img")
@@ -74,13 +74,14 @@ const update = async () => {
         divContainer.appendChild(del)
 
         
-        const productData = productsResponse.products.find(ele => ele.id == e.pid )
-        
+        const productData = e.product
+
+
         divContainer.classList.add("cartContainer")
 
         del.classList.add("btn")
         del.classList.add("deleteButton")
-        del.textContent = `REMOVE ${e.x}`
+        del.textContent = `REMOVE ${e.units}`
 
         remove.classList.add("btn")
         remove.classList.add("removeButton")
@@ -99,46 +100,48 @@ const update = async () => {
         img.classList.add("cartImageProduct")
         img.src = productData.thumbnail
 
-        const calc = ConvertPrice(e.x*productData.price, ".")
+        const calc = ConvertPrice(e.units*productData.price, ".")
         title.textContent = productData.title
         total.textContent = `Total: ${calc}`
-        amount.textContent = `${ConvertPrice(productData.price, ".")} x ${e.x}`
+        amount.textContent = `${ConvertPrice(productData.price, ".")} x ${e.units}`
 
         elementProductList.appendChild(divContainer)
         
+        checkoutButton.textContent = `TOTAL TO PAY ${ConvertPrice(cartpriceResponse.price, ".")}`
+        console.log(productData)
         del.addEventListener("click", async () => {
-            const response = await fetch(`${websiteUrl}/api/carts/${currentCart}/product/${productData.id}/${e.x}`, {
+            const req = await fetch(`${websiteUrl}/api/carts/${sessionStorage.getItem("userCart")}/product/${productData._id}/${e.units}`, {
                 method: "DELETE"
             })
-            .then(res => res.json())
-
-            if (response.status == 200) {
+            const response = await req.json()
+            
+            if (req.status == 200) {
                 update()
-                socket.emit("getCartContent", currentCart)
+                socket.emit("getCartContent", sessionStorage.getItem("userCart"))
             }
         })
 
         remove.addEventListener("click", async () => {
-            const response = await fetch(`${websiteUrl}/api/carts/${currentCart}/product/${productData.id}/${1}`, {
+            const req = await fetch(`${websiteUrl}/api/carts/${sessionStorage.getItem("userCart")}/product/${productData._id}/${1}`, {
                 method: "DELETE"
             })
-            .then(res => res.json())
+            const response = await req.json()
 
-            if (response.status == 200) {
+            if (req.status == 200) {
                 update()
-                socket.emit("getCartContent", currentCart)
+                socket.emit("getCartContent", sessionStorage.getItem("userCart"))
             }
         })
 
         add.addEventListener("click", async () => {
-            const response = await fetch(`${websiteUrl}/api/carts/${currentCart}/product/${productData.id}/${1}`, {
+            const req = await fetch(`${websiteUrl}/api/carts/${sessionStorage.getItem("userCart")}/product/${productData._id}/${1}`, {
                 method: "PUT"
             })
-            .then(res => res.json())
+            const response = await req.json()
 
-            if (response.status == 200) {
+            if (req.status == 200) {
                 update()
-                socket.emit("getCartContent", currentCart)
+                socket.emit("getCartContent", sessionStorage.getItem("userCart"))
             }
         })
 
